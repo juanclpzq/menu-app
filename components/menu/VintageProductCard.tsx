@@ -475,7 +475,7 @@ export function VintageProductCard({ product }: VintageProductCardProps) {
                   <img
                     src={
                       product.image_url ||
-                      "https://placehold.co/600x400/8B7355/white?text=Sin+Imagen"
+                      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80"
                     }
                     alt={product.name}
                     className="polaroid-image"
