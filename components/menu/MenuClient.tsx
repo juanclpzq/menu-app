@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Product } from "@/types";
 import { ModernProductCard } from "./ModernProductCard";
 import { VintageProductCard } from "./VintageProductCard";
-import { X } from "lucide-react";
+import { X, LayoutDashboard } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 
 interface MenuClientProps {
   products: Product[];
@@ -15,6 +17,30 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
   const [isVintage, setIsVintage] = useState(false);
   const [showTooltip, setShowTooltip] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [hasSession, setHasSession] = useState(false);
+
+  useEffect(() => {
+    // Verificar si hay sesión activa
+    const checkSession = async () => {
+      const supabase = createClient();
+      const { data } = await supabase.auth.getSession();
+      setHasSession(!!data.session);
+    };
+
+    checkSession();
+
+    // Suscribirse a cambios en la autenticación
+    const supabase = createClient();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setHasSession(!!session);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const filteredProducts = selectedCategory
     ? products.filter((p) => p.category === selectedCategory)
@@ -76,11 +102,52 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
             );
         }
 
-        .toggle-container {
+        .top-controls {
           position: fixed;
           top: 24px;
           right: 24px;
           z-index: 1000;
+          display: flex;
+          gap: 12px;
+        }
+
+        .dashboard-button {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          background: white;
+          border: 2px solid #8B7355;
+          border-radius: 50px;
+          color: #8B7355;
+          text-decoration: none;
+          font-size: 13px;
+          font-weight: 600;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          cursor: pointer;
+          transition: all 200ms ease;
+        }
+
+        .dashboard-button:hover {
+          background: #8B7355;
+          color: white;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .vintage-mode .dashboard-button {
+          border-color: #D84315;
+          color: #D84315;
+          font-family: 'Special Elite', monospace;
+        }
+
+        .vintage-mode .dashboard-button:hover {
+          background: #D84315;
+          color: white;
+        }
+
+        .toggle-container {
+          position: relative;
         }
 
         .toggle-switch {
@@ -350,6 +417,20 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
           margin: 0 auto;
         }
 
+        @media (max-width: 768px) {
+          .top-controls {
+            top: 16px;
+            right: 16px;
+            flex-direction: column;
+            width: auto;
+          }
+
+          .dashboard-button,
+          .toggle-switch {
+            width: auto;
+          }
+        }
+
         @media (max-width: 640px) {
           .cards-grid {
             grid-template-columns: 1fr;
@@ -357,40 +438,52 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         }
       `}</style>
 
-      {/* Toggle Switch */}
-      <div className="toggle-container">
-        <div className="toggle-switch" onClick={() => setIsVintage(!isVintage)}>
-          <span className="toggle-label">
-            {isVintage ? "Vintage" : "Moderna"}
-          </span>
-          <div className="toggle-track">
-            <div className="toggle-thumb"></div>
-          </div>
-        </div>
-
-        {showTooltip && (
-          <div className="tooltip-bubble">
-            <div className="tooltip-header">
-              <div className="tooltip-title">
-                Prueba la versión {isVintage ? "moderna" : "vintage"}
-              </div>
-              <button
-                className="tooltip-close"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowTooltip(false);
-                }}
-              >
-                <X size={16} />
-              </button>
-            </div>
-            <p className="tooltip-text">
-              Cambia entre el diseño{" "}
-              {isVintage ? "minimalista moderno" : "retro vintage"} para ver
-              diferentes estilos del menú.
-            </p>
-          </div>
+      {/* Top Controls */}
+      <div className="top-controls">
+        {hasSession && (
+          <Link href="/dashboard" className="dashboard-button">
+            <LayoutDashboard size={16} />
+            <span>Dashboard</span>
+          </Link>
         )}
+
+        <div className="toggle-container">
+          <div
+            className="toggle-switch"
+            onClick={() => setIsVintage(!isVintage)}
+          >
+            <span className="toggle-label">
+              {isVintage ? "Vintage" : "Moderna"}
+            </span>
+            <div className="toggle-track">
+              <div className="toggle-thumb"></div>
+            </div>
+          </div>
+
+          {showTooltip && (
+            <div className="tooltip-bubble">
+              <div className="tooltip-header">
+                <div className="tooltip-title">
+                  Prueba la versión {isVintage ? "moderna" : "vintage"}
+                </div>
+                <button
+                  className="tooltip-close"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTooltip(false);
+                  }}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <p className="tooltip-text">
+                Cambia entre el diseño{" "}
+                {isVintage ? "minimalista moderno" : "retro vintage"} para ver
+                diferentes estilos del menú.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Header */}
