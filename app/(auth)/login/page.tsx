@@ -27,7 +27,7 @@ export default function LoginPage() {
         });
 
       if (signInError) {
-        setError("Credenciales incorrectas. Verifica tu email y contraseña.");
+        setError("El correo o la contraseña son incorrectos.");
         setLoading(false);
         return;
       }
@@ -37,7 +37,7 @@ export default function LoginPage() {
         router.refresh();
       }
     } catch (err) {
-      setError("Ocurrió un error. Intenta nuevamente.");
+      setError("Algo salió mal. Intenta de nuevo.");
       setLoading(false);
     }
   };
@@ -45,6 +45,8 @@ export default function LoginPage() {
   return (
     <>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         * {
           margin: 0;
           padding: 0;
@@ -56,120 +58,194 @@ export default function LoginPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, #FAF8F5 0%, #E8DCC4 100%);
-          padding: 20px;
+          background: linear-gradient(180deg, #FAF8F5 0%, #F0EBE3 100%);
+          padding: 24px;
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .login-container::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -20%;
+          width: 800px;
+          height: 800px;
+          background: radial-gradient(circle at center, rgba(139, 115, 85, 0.06) 0%, transparent 65%);
+          border-radius: 50%;
+          pointer-events: none;
+          animation: float 20s ease-in-out infinite;
+        }
+
+        .login-container::after {
+          content: '';
+          position: absolute;
+          bottom: -30%;
+          right: -15%;
+          width: 700px;
+          height: 700px;
+          background: radial-gradient(circle at center, rgba(232, 220, 196, 0.15) 0%, transparent 70%);
+          border-radius: 50%;
+          pointer-events: none;
+          animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(30px, -30px) scale(1.05); }
         }
 
         .login-card {
           width: 100%;
-          max-width: 420px;
-          background: white;
-          border-radius: 16px;
-          box-shadow: 0 8px 32px rgba(45, 36, 24, 0.12);
+          max-width: 400px;
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(40px) saturate(180%);
+          -webkit-backdrop-filter: blur(40px) saturate(180%);
+          border-radius: 20px;
+          box-shadow:
+            0 0 0 0.5px rgba(139, 115, 85, 0.1),
+            0 20px 60px rgba(45, 36, 24, 0.12),
+            0 8px 24px rgba(45, 36, 24, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
           overflow: hidden;
+          position: relative;
+          z-index: 1;
         }
 
         .login-header {
-          background: linear-gradient(135deg, #8B7355 0%, #7A6347 100%);
-          padding: 40px 32px;
+          padding: 48px 36px 36px;
           text-align: center;
-          color: white;
+          background: transparent;
         }
 
         .login-title {
-          font-size: 28px;
-          font-weight: 700;
-          margin-bottom: 8px;
+          font-size: 32px;
+          font-weight: 600;
+          margin-bottom: 6px;
           letter-spacing: -0.02em;
+          color: #1D1D1F;
+          line-height: 1.15;
         }
 
         .login-subtitle {
-          font-size: 14px;
-          opacity: 0.9;
+          font-size: 17px;
+          font-weight: 400;
+          color: #86868B;
+          letter-spacing: -0.01em;
+          line-height: 1.4;
         }
 
         .login-form {
-          padding: 32px;
+          padding: 0 36px 36px;
         }
 
         .form-group {
-          margin-bottom: 24px;
+          margin-bottom: 20px;
         }
 
         .form-label {
           display: block;
-          font-size: 14px;
-          font-weight: 600;
-          color: #2D2418;
+          font-size: 13px;
+          font-weight: 500;
+          color: #1D1D1F;
           margin-bottom: 8px;
+          letter-spacing: -0.01em;
         }
 
         .form-input {
           width: 100%;
-          padding: 12px 16px;
-          font-size: 15px;
-          border: 2px solid #E8DCC4;
-          border-radius: 8px;
-          transition: all 200ms ease;
-          font-family: inherit;
+          padding: 14px 16px;
+          font-size: 17px;
+          border: 0.5px solid rgba(0, 0, 0, 0.1);
+          border-radius: 10px;
+          transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+          font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+          background: rgba(255, 255, 255, 0.8);
+          color: #1D1D1F;
+          -webkit-appearance: none;
+          appearance: none;
+        }
+
+        .form-input::placeholder {
+          color: #86868B;
+          font-weight: 400;
         }
 
         .form-input:focus {
           outline: none;
           border-color: #8B7355;
-          box-shadow: 0 0 0 3px rgba(139, 115, 85, 0.1);
+          background: rgba(255, 255, 255, 0.95);
+          box-shadow:
+            0 0 0 4px rgba(139, 115, 85, 0.1),
+            0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .form-input:disabled {
-          background: #F5F5F5;
+          background: rgba(0, 0, 0, 0.03);
           cursor: not-allowed;
+          opacity: 0.5;
         }
 
         .error-message {
-          background: #FFF3F3;
-          border: 1px solid #FFCCCC;
+          background: rgba(255, 59, 48, 0.08);
+          border: 0.5px solid rgba(255, 59, 48, 0.2);
           color: #D32F2F;
           padding: 12px 16px;
-          border-radius: 8px;
-          font-size: 14px;
-          margin-bottom: 24px;
+          border-radius: 10px;
+          font-size: 15px;
+          font-weight: 400;
+          margin-bottom: 20px;
           display: flex;
-          align-items: center;
-          gap: 8px;
+          align-items: flex-start;
+          gap: 10px;
+          line-height: 1.4;
+          letter-spacing: -0.01em;
         }
 
         .error-icon {
           flex-shrink: 0;
+          font-size: 17px;
+          margin-top: 1px;
         }
 
         .submit-button {
           width: 100%;
-          padding: 14px;
-          font-size: 15px;
-          font-weight: 600;
+          padding: 16px;
+          margin-top: 8px;
+          font-size: 17px;
+          font-weight: 500;
+          letter-spacing: -0.01em;
           color: white;
           background: #8B7355;
           border: none;
-          border-radius: 8px;
+          border-radius: 10px;
           cursor: pointer;
-          transition: all 200ms ease;
+          transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
           position: relative;
+          box-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .submit-button:hover:not(:disabled) {
           background: #7A6347;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(139, 115, 85, 0.3);
+          box-shadow:
+            0 2px 8px rgba(139, 115, 85, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .submit-button:active:not(:disabled) {
-          transform: translateY(0);
+          transform: scale(0.98);
+          box-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .submit-button:disabled {
-          background: #B8A89A;
+          background: rgba(139, 115, 85, 0.5);
           cursor: not-allowed;
-          transform: none;
+          opacity: 0.6;
         }
 
         .button-spinner {
@@ -187,35 +263,80 @@ export default function LoginPage() {
         }
 
         .login-footer {
-          padding: 24px 32px;
-          background: #FAF8F5;
+          padding: 24px 36px 32px;
           text-align: center;
           font-size: 13px;
-          color: #7A6A56;
-          border-top: 1px solid #E8DCC4;
+          color: #86868B;
+          line-height: 1.5;
+          letter-spacing: -0.01em;
+          background: transparent;
+        }
+
+        .footer-text {
+          margin-bottom: 6px;
+          font-weight: 400;
         }
 
         .footer-link {
           color: #8B7355;
           text-decoration: none;
-          font-weight: 600;
+          font-weight: 500;
+          letter-spacing: -0.01em;
+          transition: opacity 0.2s ease;
         }
 
         .footer-link:hover {
-          text-decoration: underline;
+          opacity: 0.7;
         }
 
+        /* Responsive adjustments */
         @media (max-width: 480px) {
+          .login-container {
+            padding: 20px;
+          }
+
+          .login-card {
+            max-width: 100%;
+          }
+
           .login-header {
-            padding: 32px 24px;
+            padding: 40px 28px 28px;
           }
 
           .login-form {
-            padding: 24px;
+            padding: 0 28px 28px;
+          }
+
+          .login-footer {
+            padding: 20px 28px 28px;
           }
 
           .login-title {
-            font-size: 24px;
+            font-size: 28px;
+          }
+
+          .login-subtitle {
+            font-size: 15px;
+          }
+
+          .form-input {
+            font-size: 16px;
+          }
+
+          .submit-button {
+            font-size: 16px;
+          }
+        }
+
+        /* Accessibility: Reduce motion */
+        @media (prefers-reduced-motion: reduce) {
+          .login-container::before,
+          .login-container::after {
+            animation: none;
+          }
+
+          * {
+            transition-duration: 0.01ms !important;
           }
         }
       `}</style>
@@ -223,8 +344,8 @@ export default function LoginPage() {
       <div className="login-container">
         <div className="login-card">
           <div className="login-header">
-            <h1 className="login-title">Dashboard Admin</h1>
-            <p className="login-subtitle">Gestor de Menú Digital</p>
+            <h1 className="login-title">Iniciar sesión</h1>
+            <p className="login-subtitle">Accede a tu panel de administración</p>
           </div>
 
           <form className="login-form" onSubmit={handleLogin}>
@@ -237,13 +358,13 @@ export default function LoginPage() {
 
             <div className="form-group">
               <label htmlFor="email" className="form-label">
-                Email
+                Correo electrónico
               </label>
               <input
                 id="email"
                 type="email"
                 className="form-input"
-                placeholder="tu@email.com"
+                placeholder="nombre@ejemplo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
@@ -260,7 +381,7 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 className="form-input"
-                placeholder="••••••••"
+                placeholder="Ingresa tu contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
@@ -282,13 +403,9 @@ export default function LoginPage() {
           </form>
 
           <div className="login-footer">
-            <p>
-              Sistema de gestión de menú digital
-              <br />
-              <a href="/menu" className="footer-link">
-                Ver menú público →
-              </a>
-            </p>
+            <a href="/menu" className="footer-link">
+              Ver menú →
+            </a>
           </div>
         </div>
       </div>
