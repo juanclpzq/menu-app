@@ -203,22 +203,6 @@ export default function MenuClient({
             );
         }
 
-        .login-desktop {
-          position: fixed;
-          top: 24px;
-          left: 24px;
-          z-index: 1000;
-          transition: transform 300ms ease;
-        }
-
-        .login-desktop.hidden {
-          transform: translateY(-120px);
-        }
-
-        .login-mobile {
-          display: none;
-        }
-
         .top-controls {
           position: fixed;
           top: 24px;
@@ -231,10 +215,6 @@ export default function MenuClient({
 
         /* Add safe area spacing only in standalone/PWA mode */
         @media (display-mode: standalone) {
-          .login-desktop {
-            top: calc(24px + env(safe-area-inset-top, 50px));
-          }
-
           .top-controls {
             top: calc(24px + env(safe-area-inset-top, 50px));
           }
@@ -495,14 +475,6 @@ export default function MenuClient({
         }
 
         @media (max-width: 768px) {
-          .login-desktop {
-            display: none;
-          }
-
-          .login-mobile {
-            display: flex;
-          }
-
           .top-controls {
             top: 16px;
             left: 16px;
@@ -775,16 +747,6 @@ export default function MenuClient({
         }
       `}</style>
 
-      {/* Top Controls - Desktop */}
-      {!hasSession && (
-        <div className={`login-desktop ${headerHidden ? "hidden" : ""}`}>
-          <Link href="/login" className="dashboard-button login-button">
-            <LogIn size={16} />
-            <span>Login</span>
-          </Link>
-        </div>
-      )}
-
       {/* Top Controls */}
       <div className={`top-controls ${headerHidden ? "hidden" : ""}`}>
         {hasSession ? (
@@ -793,7 +755,7 @@ export default function MenuClient({
             <span>Dashboard</span>
           </Link>
         ) : (
-          <Link href="/login" className="dashboard-button login-button login-mobile">
+          <Link href="/login" className="dashboard-button login-button">
             <LogIn size={16} />
             <span>Login</span>
           </Link>
