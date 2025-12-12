@@ -59,6 +59,13 @@ export default function AdminHeader({ userEmail }: AdminHeaderProps) {
           box-shadow: 0 1px 3px rgba(45, 36, 24, 0.04);
         }
 
+        /* Add safe area spacing only in standalone/PWA mode */
+        @media (display-mode: standalone) {
+          .admin-header {
+            padding-top: env(safe-area-inset-top, 0px);
+          }
+        }
+
         .header-container {
           max-width: 1400px;
           margin: 0 auto;

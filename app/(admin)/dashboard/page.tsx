@@ -1,9 +1,10 @@
 // app/(admin)/dashboard/page.tsx
 import { createClient } from "@/lib/supabase/server";
 import StatsCards from "@/components/dashboard/StatsCards";
-import RecentProducts from "@/components/dashboard/RecentProducts";
+import CategoryProducts from "@/components/dashboard/CategoryProducts";
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { Product } from "@/types";
 
 async function getDashboardStats() {
   const supabase = await createClient();
@@ -13,20 +14,14 @@ async function getDashboardStats() {
     .from("products")
     .select("*", { count: "exact", head: true });
 
-  // Productos por categoría
+  // Productos para estadísticas
   const { data: products } = await supabase
     .from("products")
     .select("category, price");
 
-  const categoryCount = products?.reduce(
-    (acc: Record<string, number>, product) => {
-      acc[product.category] = (acc[product.category] || 0) + 1;
-      return acc;
-    },
-    {}
-  );
-
-  const totalCategories = Object.keys(categoryCount || {}).length;
+  // Total de categorías únicas
+  const categories = new Set(products?.map(p => p.category) || []);
+  const totalCategories = categories.size;
 
   // Precio promedio
   const averagePrice =
@@ -46,25 +41,33 @@ async function getDashboardStats() {
     totalCategories,
     averagePrice: Math.round(averagePrice * 100) / 100,
     popularProducts: popularCount || 0,
-    categoryBreakdown: categoryCount || {},
   };
 }
 
-async function getRecentProducts() {
+async function getProductsByCategory() {
   const supabase = await createClient();
 
-  const { data } = await supabase
+  const { data: products } = await supabase
     .from("products")
     .select("*")
-    .order("created_at", { ascending: false })
-    .limit(5);
+    .order("category", { ascending: true });
 
-  return data || [];
+  // Agrupar productos por categoría
+  const productsByCategory: Record<string, Product[]> = {};
+
+  products?.forEach((product) => {
+    if (!productsByCategory[product.category]) {
+      productsByCategory[product.category] = [];
+    }
+    productsByCategory[product.category].push(product);
+  });
+
+  return productsByCategory;
 }
 
 export default async function DashboardPage() {
   const stats = await getDashboardStats();
-  const recentProducts = await getRecentProducts();
+  const productsByCategory = await getProductsByCategory();
 
   return (
     <>
@@ -156,7 +159,7 @@ export default async function DashboardPage() {
 
       <div className="dashboard-sections">
         <StatsCards stats={stats} />
-        <RecentProducts products={recentProducts} />
+        <CategoryProducts productsByCategory={productsByCategory} />
       </div>
     </>
   );

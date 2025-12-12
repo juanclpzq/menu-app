@@ -32,7 +32,7 @@ export default function ProductForm({
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>(
-    product?.image_url || ""
+    product?.image_url ? `${product.image_url}?t=${Date.now()}` : ""
   );
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);

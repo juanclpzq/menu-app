@@ -486,10 +486,7 @@ export function VintageProductCard({ product }: VintageProductCardProps) {
               <div className="polaroid-frame">
                 <div className="polaroid-image-container">
                   <img
-                    src={
-                      product.image_url ||
-                      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80"
-                    }
+                    src={product.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80'}
                     alt={product.name}
                     className="polaroid-image"
                   />

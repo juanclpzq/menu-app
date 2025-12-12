@@ -1,0 +1,95 @@
+Reto práctico – Fullstack Developer
+Título del reto: Gestor de Menú Digital con Dashboard de Administración
+Objetivo
+Construir una aplicación fullstack que permita a un negocio (por ejemplo, un restaurante)
+gestionar su menú desde un dashboard de administrador y mostrarlo en un menú digital
+público.
+La aplicación debe estar desplegada en la nube y ser accesible por URL.
+
+1. Requerimientos funcionales mínimos
+   1.1. Dashboard de administración (privado)
+   Un usuario administrador debe poder:
+1. Listar todos los productos del menú.
+1. Crear un producto con los campos:
+   ○ Nombre (obligatorio)
+   ○ Precio (obligatorio)
+   ○ Descripción (opcional)
+   ○ Categoría (ej. “Entradas”, “Bebidas”, “Postres”) (obligatorio)
+   ○ Imagen del producto (URL o subida de archivo).
+1. Editar un producto existente.
+1. Eliminar un producto.
+1. Ver un resumen en el dashboard, por ejemplo:
+   ○ Número total de productos.
+   ○ Número de productos por categoría.
+   ○ Precio promedio o similar (libre a criterio del candidato).
+
+💡 El dashboard puede ser una SPA, un panel simple o una vista protegida,
+siempre que sea funcional y coherente.
+
+1.2. Menú digital (público)
+Debe existir una URL pública (por ejemplo /menu o similar) donde cualquier persona pueda:
+
+1. Ver el listado de productos del menú.
+2. Ver para cada producto:
+   ○ Nombre
+   ○ Precio
+   ○ Imagen
+   ○ Categoría
+3. (Opcional pero deseable) Filtrar por categoría.
+
+El diseño no tiene que ser perfecto, pero sí usable y claro. 2. Requerimientos técnicos mínimos
+El candidato puede usar la tecnología que prefiera, pero debe cumplir:
+
+1. Backend
+   ○ Exponer una API (REST o GraphQL) para gestionar los productos del menú
+   (CRUD).
+   ○ Usar algún tipo de persistencia real:
+   ■ Base de datos SQL o NoSQL
+   ■ o, mínimo, un archivo / storage que no se pierda al reiniciar el servidor
+   (aunque se recomienda DB).
+
+○ Validar datos básicos (ej. nombre requerido, precio numérico, etc.).
+○ Manejo correcto de errores (respuestas con status y mensajes apropiados). 2. Frontend
+
+○ Consumir la API del backend.
+○ Implementar:
+■ Dashboard de administración.
+■ Menú digital público.
+○ Puede ser SSR, SPA, MPA, etc. (React, Vue, Angular, Blade, EJS, etc. libre). 3. Despliegue en la nube
+○ La aplicación debe estar desplegada en un entorno de nube, por ejemplo:
+■ Vercel, Render, Railway, Netlify + backend aparte, AWS, Azure, GCP,
+etc.
+○ Debe entregar:
+■ URL pública del menú digital.
+■ URL (si es diferente) del dashboard de administración.
+○ Si requiere credenciales de admin, incluirlas en el README. 4. Código y documentación
+○ Repositorio en Git (GitHub, GitLab, Bitbucket, etc.).
+○ Archivo README.md con:
+■ Descripción breve del proyecto.
+■ Tecnologías usadas.
+■ Instrucciones para correr localmente.
+■ Instrucciones sobre el despliegue.
+■ Credenciales de prueba (usuario/contraseña) si hay login.
+
+3. Historias de usuario sugeridas
+   Puedes añadir estas historias al enunciado:
+
+1. Administrador – Gestión de productos
+
+Como administrador quiero crear, editar y eliminar productos del menú para
+mantener la información actualizada.
+
+2. Administrador – Ver estado del menú
+
+Como administrador quiero ver un resumen de los productos (totales y por
+categoría) para entender rápidamente la composición del menú.
+
+3. Cliente – Ver menú digital
+
+Como cliente quiero ver un menú digital con nombre, precio e imagen de los
+productos para decidir qué pedir.
+
+4. Cliente – Navegar por categorías (opcional)
+
+Como cliente quiero filtrar el menú por categorías para encontrar más fácil el tipo de
+producto que busco.

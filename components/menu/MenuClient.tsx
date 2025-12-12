@@ -4,22 +4,21 @@ import { useState, useEffect, useRef } from "react";
 import { Product } from "@/types";
 import { ModernProductCard } from "./ModernProductCard";
 import { VintageProductCard } from "./VintageProductCard";
-import { LayoutDashboard, Heart, ArrowUp, Menu } from "lucide-react";
+import { LayoutDashboard, Heart, ArrowUp, Menu, LogIn } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { PWAInstallPrompt } from "../PWAInstallPrompt";
 
 interface MenuClientProps {
-  products: Product[];
-  categories: string[];
   hasSession: boolean;
 }
 
 export default function MenuClient({
-  products,
-  categories,
   hasSession: initialHasSession,
 }: MenuClientProps) {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isVintage, setIsVintage] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [hasSession, setHasSession] = useState(initialHasSession);
@@ -29,6 +28,38 @@ export default function MenuClient({
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const lastScrollY = useRef(0);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Fetch products on mount
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/products', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch products');
+
+        const result = await response.json();
+        const productsData = result.data || [];
+
+        setProducts(productsData);
+
+        // Extract unique categories
+        const uniqueCategories = [...new Set(productsData.map((p: Product) => p.category))] as string[];
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     // Suscribirse a cambios en la autenticación (solo para actualizaciones en tiempo real)
@@ -172,6 +203,22 @@ export default function MenuClient({
             );
         }
 
+        .login-desktop {
+          position: fixed;
+          top: 24px;
+          left: 24px;
+          z-index: 1000;
+          transition: transform 300ms ease;
+        }
+
+        .login-desktop.hidden {
+          transform: translateY(-120px);
+        }
+
+        .login-mobile {
+          display: none;
+        }
+
         .top-controls {
           position: fixed;
           top: 24px;
@@ -180,6 +227,21 @@ export default function MenuClient({
           display: flex;
           gap: 12px;
           transition: transform 300ms ease;
+        }
+
+        /* Add safe area spacing only in standalone/PWA mode */
+        @media (display-mode: standalone) {
+          .login-desktop {
+            top: calc(24px + env(safe-area-inset-top, 50px));
+          }
+
+          .top-controls {
+            top: calc(24px + env(safe-area-inset-top, 50px));
+          }
+
+          .prototype-wrapper {
+            padding-top: calc(80px + env(safe-area-inset-top, 50px));
+          }
         }
 
         .top-controls.hidden {
@@ -219,6 +281,29 @@ export default function MenuClient({
         .vintage-mode .dashboard-button:hover {
           background: #D84315;
           color: white;
+        }
+
+        .login-button {
+          background: #8B7355;
+          color: white;
+          border-color: #8B7355;
+        }
+
+        .login-button:hover {
+          background: #7A6347;
+          border-color: #7A6347;
+          color: white;
+        }
+
+        .vintage-mode .login-button {
+          background: #D84315;
+          border-color: #D84315;
+          color: white;
+        }
+
+        .vintage-mode .login-button:hover {
+          background: #BF360C;
+          border-color: #BF360C;
         }
 
         .toggle-container {
@@ -410,6 +495,14 @@ export default function MenuClient({
         }
 
         @media (max-width: 768px) {
+          .login-desktop {
+            display: none;
+          }
+
+          .login-mobile {
+            display: flex;
+          }
+
           .top-controls {
             top: 16px;
             left: 16px;
@@ -418,6 +511,17 @@ export default function MenuClient({
             justify-content: space-between;
             width: auto;
             gap: 8px;
+          }
+
+          /* Only add extra spacing in standalone/PWA mode */
+          @media (display-mode: standalone) {
+            .top-controls {
+              top: calc(16px + env(safe-area-inset-top, 50px));
+            }
+
+            .prototype-wrapper {
+              padding-top: calc(80px + env(safe-area-inset-top, 50px));
+            }
           }
 
           .dashboard-button {
@@ -671,12 +775,27 @@ export default function MenuClient({
         }
       `}</style>
 
+      {/* Top Controls - Desktop */}
+      {!hasSession && (
+        <div className={`login-desktop ${headerHidden ? "hidden" : ""}`}>
+          <Link href="/login" className="dashboard-button login-button">
+            <LogIn size={16} />
+            <span>Login</span>
+          </Link>
+        </div>
+      )}
+
       {/* Top Controls */}
       <div className={`top-controls ${headerHidden ? "hidden" : ""}`}>
-        {hasSession && (
+        {hasSession ? (
           <Link href="/dashboard" className="dashboard-button">
             <LayoutDashboard size={16} />
             <span>Dashboard</span>
+          </Link>
+        ) : (
+          <Link href="/login" className="dashboard-button login-button login-mobile">
+            <LogIn size={16} />
+            <span>Login</span>
           </Link>
         )}
 
@@ -715,7 +834,19 @@ export default function MenuClient({
 
       {/* Cards Grid */}
       <div className="cards-grid">
-        {productsWithNumber.length > 0 ? (
+        {isLoading ? (
+          <p
+            style={{
+              gridColumn: "1 / -1",
+              textAlign: "center",
+              color: "#7A6A56",
+              fontSize: "16px",
+              padding: "40px 20px",
+            }}
+          >
+            Cargando menú...
+          </p>
+        ) : productsWithNumber.length > 0 ? (
           productsWithNumber.map((product) =>
             isVintage ? (
               <VintageProductCard key={product.id} product={product} />
