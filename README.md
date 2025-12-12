@@ -5,6 +5,7 @@ Aplicación fullstack que permite a un negocio (restaurante) gestionar su menú 
 ## Descripción
 
 Sistema completo de gestión de menú digital que incluye:
+
 - **Menú público**: Interfaz accesible para clientes donde pueden ver productos con filtros por categoría
 - **Dashboard administrativo**: Panel de control privado para gestionar el catálogo de productos
 - **API REST**: Endpoints para operaciones CRUD completas
@@ -14,16 +15,19 @@ Sistema completo de gestión de menú digital que incluye:
 ## Tecnologías Utilizadas
 
 ### Frontend
+
 - **Next.js 14** - Framework React con App Router y Server-Side Rendering
 - **TypeScript** - Tipado estático para mayor seguridad
 - **CSS-in-JS** - Estilos inline para componentes
 
 ### Backend
+
 - **Next.js API Routes** - API REST serverless
 - **Supabase** - PostgreSQL database, autenticación y almacenamiento
 - **Zod** - Validación de esquemas y datos
 
 ### Infraestructura
+
 - **Vercel** - Despliegue y hosting
 - **Supabase Storage** - Almacenamiento de imágenes
 - **Edge Runtime** - Ejecución optimizada de APIs
@@ -31,7 +35,9 @@ Sistema completo de gestión de menú digital que incluye:
 ## Funcionalidades Implementadas
 
 ### Dashboard de Administración (Privado)
+
 El administrador puede:
+
 - ✅ **Listar** todos los productos del menú
 - ✅ **Crear** productos con:
   - Nombre (obligatorio)
@@ -48,7 +54,9 @@ El administrador puede:
   - Producto más caro
 
 ### Menú Digital (Público)
+
 Disponible en `/menu` para cualquier visitante:
+
 - ✅ Ver listado completo de productos
 - ✅ Visualizar para cada producto:
   - Nombre
@@ -63,6 +71,7 @@ Disponible en `/menu` para cualquier visitante:
 ## Instalación y Ejecución Local
 
 ### Prerequisitos
+
 - Node.js 18.17 o superior
 - Cuenta de Supabase (gratuita)
 - npm o yarn
@@ -70,12 +79,14 @@ Disponible en `/menu` para cualquier visitante:
 ### Pasos de Instalación
 
 1. **Clonar el repositorio**
+
    ```bash
    git clone <repository-url>
    cd menu-app
    ```
 
 2. **Instalar dependencias**
+
    ```bash
    npm install
    ```
@@ -83,6 +94,7 @@ Disponible en `/menu` para cualquier visitante:
 3. **Configurar variables de entorno**
 
    Crear archivo `.env.local` en la raíz del proyecto:
+
    ```env
    NEXT_PUBLIC_SUPABASE_URL=tu_url_de_supabase
    NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key_de_supabase
@@ -91,6 +103,7 @@ Disponible en `/menu` para cualquier visitante:
 4. **Configurar base de datos en Supabase**
 
    En el SQL Editor de Supabase, ejecutar:
+
    ```sql
    -- Crear tabla de productos
    CREATE TABLE products (
@@ -142,10 +155,12 @@ Disponible en `/menu` para cualquier visitante:
 5. **Crear usuario administrador**
 
    En Supabase > Authentication > Users:
+
    - Crear nuevo usuario con email y contraseña
    - Guardar credenciales para acceso al dashboard
 
 6. **Ejecutar en modo desarrollo**
+
    ```bash
    npm run dev
    ```
@@ -177,16 +192,17 @@ npm run lint     # Ejecutar linter
 
 ### URLs del Proyecto Desplegado
 
-- **Menú público**: [URL_PUBLICA_MENU]
-- **Dashboard administrativo**: [URL_DASHBOARD]
+- **Login**: https://menu-app-pi-lime.vercel.app/
+- **Menú público**: https://menu-app-pi-lime.vercel.app/menu
+- **Dashboard administrativo**: https://menu-app-pi-lime.vercel.app/dashboard
 
 ## Credenciales de Prueba
 
 Para acceder al dashboard de administración:
 
 ```
-Email: [USUARIO_ADMIN]
-Contraseña: [PASSWORD_ADMIN]
+Email: admin@admin.com
+Contraseña: admin
 ```
 
 ## Estructura del Proyecto
@@ -224,11 +240,13 @@ menu-app/
 ## API Endpoints
 
 ### Públicos
+
 - `GET /api/products` - Listar todos los productos
 - `GET /api/products?category=X` - Filtrar por categoría
 - `GET /api/products/:id` - Obtener un producto
 
 ### Protegidos (requieren autenticación)
+
 - `POST /api/products` - Crear producto
 - `PATCH /api/products/:id` - Actualizar producto
 - `DELETE /api/products/:id` - Eliminar producto
@@ -245,6 +263,7 @@ menu-app/
 ## Características Técnicas
 
 ### Seguridad
+
 - Row Level Security (RLS) en base de datos
 - Autenticación con Supabase Auth
 - Protección de rutas con middleware
@@ -252,6 +271,7 @@ menu-app/
 - Headers de seguridad HTTP
 
 ### Performance
+
 - Server-Side Rendering (SSR)
 - Revalidación incremental (ISR)
 - Edge Runtime para APIs
@@ -259,6 +279,7 @@ menu-app/
 - Caché estratégico (60s menú, 30s dashboard)
 
 ### Experiencia de Usuario
+
 - Diseño responsive
 - Estados de carga con skeletons
 - Manejo de errores con boundaries
@@ -268,15 +289,19 @@ menu-app/
 ## Historias de Usuario Implementadas
 
 ### 1. Administrador - Gestión de productos
+
 ✅ Como administrador puedo crear, editar y eliminar productos del menú para mantener la información actualizada.
 
 ### 2. Administrador - Ver estado del menú
+
 ✅ Como administrador puedo ver un resumen de los productos (totales y por categoría) para entender rápidamente la composición del menú.
 
 ### 3. Cliente - Ver menú digital
+
 ✅ Como cliente puedo ver un menú digital con nombre, precio e imagen de los productos para decidir qué pedir.
 
 ### 4. Cliente - Navegar por categorías
+
 ✅ Como cliente puedo filtrar el menú por categorías para encontrar más fácil el tipo de producto que busco.
 
 ## Autor
