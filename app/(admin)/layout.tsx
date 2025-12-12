@@ -22,7 +22,7 @@ export default function AdminLayout({
         }
 
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
           background: #FAF8F5;
           color: #2D2418;
         }

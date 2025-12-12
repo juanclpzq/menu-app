@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
-export const metadata: Metadata = {
-  title: "Menú Digital",
-  description: "Menú digital con gestión de productos",
-};
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap", // Importante: esto muestra texto inmediatamente
+  preload: true,
+});
 
 export default function RootLayout({
   children,
@@ -11,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
+    <html lang="es" className={inter.className}>
       <body>{children}</body>
     </html>
   );

@@ -59,7 +59,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
       }`}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap');
+        @import url(https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap);
 
         * {
           margin: 0;
@@ -68,7 +68,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         }
 
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
         }
 
         .prototype-wrapper {
@@ -138,7 +138,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         .vintage-mode .dashboard-button {
           border-color: #D84315;
           color: #D84315;
-          font-family: 'Special Elite', monospace;
+          font-family: Special Elite, monospace;
         }
 
         .vintage-mode .dashboard-button:hover {
@@ -181,7 +181,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
 
         .vintage-mode .toggle-label {
           color: #3E2723;
-          font-family: 'Special Elite', monospace;
+          font-family: Special Elite, monospace;
         }
 
         .toggle-track {
@@ -249,7 +249,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         }
 
         .tooltip-bubble::before {
-          content: '';
+          content: ;
           position: absolute;
           top: -8px;
           right: 24px;
@@ -287,7 +287,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
 
         .vintage-mode .tooltip-title {
           color: #3E2723;
-          font-family: 'Special Elite', monospace;
+          font-family: Special Elite, monospace;
         }
 
         .tooltip-close {
@@ -340,7 +340,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         }
 
         .vintage-mode .main-title {
-          font-family: 'Playfair Display', serif;
+          font-family: Playfair Display, serif;
           font-weight: 900;
           color: #3E2723;
           text-transform: uppercase;
@@ -358,7 +358,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         }
 
         .vintage-mode .main-subtitle {
-          font-family: 'Special Elite', monospace;
+          font-family: Special Elite, monospace;
           font-size: 14px;
           color: #3E2723;
           text-transform: uppercase;
@@ -396,7 +396,7 @@ export default function MenuClient({ products, categories }: MenuClientProps) {
         .vintage-mode .category-select {
           border-color: #D84315;
           color: #3E2723;
-          font-family: 'Special Elite', monospace;
+          font-family: Special Elite, monospace;
         }
 
         .vintage-mode .category-select:hover {
