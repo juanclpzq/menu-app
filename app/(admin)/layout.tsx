@@ -1,17 +1,24 @@
 // app/(admin)/layout.tsx
 import type { Metadata } from "next";
 import AdminHeader from "@/components/dashboard/AdminHeader";
+import ToastProvider from "@/components/providers/ToastProvider";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dashboard - Gestor de Menú",
   description: "Panel de administración del menú digital",
 };
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Get user server-side for instant rendering
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  const userEmail = session?.user?.email || null;
+
   return (
     <>
       <style>{`
@@ -49,7 +56,8 @@ export default function AdminLayout({
       `}</style>
 
       <div className="admin-wrapper">
-        <AdminHeader />
+        <ToastProvider />
+        <AdminHeader userEmail={userEmail} />
         <main className="admin-content">{children}</main>
       </div>
     </>

@@ -6,12 +6,17 @@ import { useRouter } from "next/navigation";
 import { Product } from "@/types";
 import { Upload, X, Loader2, Save } from "lucide-react";
 import { uploadProductImage, deleteProductImage } from "@/lib/storage/images";
+import toast from "react-hot-toast";
 
 interface ProductFormProps {
   product?: Product;
+  existingCategories?: string[];
 }
 
-export default function ProductForm({ product }: ProductFormProps) {
+export default function ProductForm({
+  product,
+  existingCategories = [],
+}: ProductFormProps) {
   const router = useRouter();
   const isEditing = !!product;
 
@@ -67,12 +72,17 @@ export default function ProductForm({ product }: ProductFormProps) {
     setError("");
     setSubmitting(true);
 
+    const toastId = toast.loading(
+      isEditing ? "Actualizando producto..." : "Creando producto..."
+    );
+
     try {
       let imageUrl = formData.image_url;
 
       // Subir imagen si hay una nueva
       if (imageFile) {
         setUploading(true);
+        toast.loading("Subiendo imagen...", { id: toastId });
         const uploadedUrl = await uploadProductImage(imageFile);
         if (uploadedUrl) {
           imageUrl = uploadedUrl;
@@ -110,10 +120,19 @@ export default function ProductForm({ product }: ProductFormProps) {
         throw new Error(data.error || "Error al guardar");
       }
 
+      toast.success(
+        isEditing
+          ? "Producto actualizado correctamente"
+          : "Producto creado correctamente",
+        { id: toastId }
+      );
+
       router.push("/dashboard/products");
       router.refresh();
     } catch (err: any) {
-      setError(err.message || "Error al guardar el producto");
+      const errorMsg = err.message || "Error al guardar el producto";
+      setError(errorMsg);
+      toast.error(errorMsg, { id: toastId });
       setSubmitting(false);
     }
   };
@@ -428,6 +447,7 @@ export default function ProductForm({ product }: ProductFormProps) {
               </label>
               <input
                 type="text"
+                list="categories-list"
                 className="form-input"
                 value={formData.category}
                 onChange={(e) =>
@@ -436,6 +456,11 @@ export default function ProductForm({ product }: ProductFormProps) {
                 placeholder="Ej: Platos Fuertes"
                 required
               />
+              <datalist id="categories-list">
+                {existingCategories.map((cat) => (
+                  <option key={cat} value={cat} />
+                ))}
+              </datalist>
             </div>
           </div>
 
@@ -472,7 +497,7 @@ export default function ProductForm({ product }: ProductFormProps) {
                   </div>
                   <input
                     type="file"
-                    accept="image/jpeg,image/png,image/webp"
+                    accept="image/*"
                     onChange={handleImageChange}
                     style={{ display: "none" }}
                   />

@@ -1,5 +1,8 @@
 // components/dashboard/StatsCards.tsx
+"use client";
+
 import { ShoppingBag, Layers, DollarSign, Star } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface Stats {
   totalProducts: number;
@@ -181,10 +184,17 @@ export default function StatsCards({ stats }: StatsCardsProps) {
 
       <section className="stats-section">
         <div className="stats-grid">
-          {cards.map((card) => {
+          {cards.map((card, index) => {
             const Icon = card.icon;
             return (
-              <div key={card.label} className="stat-card">
+              <motion.div
+                key={card.label}
+                className="stat-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+              >
                 <div className="stat-header">
                   <span className="stat-label">{card.label}</span>
                   <div
@@ -198,7 +208,7 @@ export default function StatsCards({ stats }: StatsCardsProps) {
                   </div>
                 </div>
                 <div className="stat-value">{card.value}</div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

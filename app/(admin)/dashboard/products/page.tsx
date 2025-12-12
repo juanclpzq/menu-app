@@ -2,7 +2,13 @@
 import { createClient } from "@/lib/supabase/server";
 import ProductsTable from "@/components/dashboard/ProductsTable";
 import Link from "next/link";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Productos - Dashboard Admin",
+  description: "Administra los productos del menú digital",
+};
 
 async function getProducts() {
   const supabase = await createClient();
@@ -78,6 +84,35 @@ export default async function ProductsPage() {
           box-shadow: 0 4px 12px rgba(139, 115, 85, 0.3);
         }
 
+        .fab-button {
+          display: none;
+          position: fixed;
+          bottom: 24px;
+          right: 24px;
+          width: 56px;
+          height: 56px;
+          background: #8B7355;
+          border: none;
+          border-radius: 50%;
+          color: white;
+          box-shadow: 0 4px 16px rgba(139, 115, 85, 0.4);
+          cursor: pointer;
+          transition: all 200ms ease;
+          z-index: 50;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .fab-button:hover {
+          background: #7A6347;
+          transform: scale(1.1);
+          box-shadow: 0 6px 20px rgba(139, 115, 85, 0.5);
+        }
+
+        .fab-button:active {
+          transform: scale(0.95);
+        }
+
         @media (max-width: 768px) {
           .products-title {
             font-size: 24px;
@@ -89,8 +124,11 @@ export default async function ProductsPage() {
           }
 
           .add-button {
-            width: 100%;
-            justify-content: center;
+            display: none;
+          }
+
+          .fab-button {
+            display: flex;
           }
         }
       `}</style>
@@ -112,8 +150,14 @@ export default async function ProductsPage() {
       </div>
 
       <ProductsTable products={products} />
+
+      {/* Floating Action Button (Mobile Only) */}
+      <Link href="/dashboard/products/new" className="fab-button">
+        <Plus size={24} strokeWidth={2.5} />
+      </Link>
     </>
   );
 }
 
-export const revalidate = 0; // Always fresh data
+// Usar ISR con revalidación cada 30 segundos
+export const revalidate = 30;

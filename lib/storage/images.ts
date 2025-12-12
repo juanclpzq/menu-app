@@ -3,9 +3,18 @@ import { createClient } from "@/lib/supabase/client";
 export async function uploadProductImage(file: File): Promise<string | null> {
   const supabase = createClient();
 
-  const validTypes = ["image/jpeg", "image/png", "image/webp"];
+  const validTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+    "image/heif",
+  ];
   if (!validTypes.includes(file.type)) {
-    throw new Error("Tipo de archivo no válido. Use JPG, PNG o WEBP");
+    throw new Error(
+      "Tipo de archivo no válido. Use JPG, PNG, WEBP, HEIC o HEIF"
+    );
   }
 
   const maxSize = 5 * 1024 * 1024;
@@ -53,9 +62,16 @@ export async function deleteProductImage(imageUrl: string): Promise<boolean> {
 }
 
 export function validateImageFile(file: File): string | null {
-  const validTypes = ["image/jpeg", "image/png", "image/webp"];
+  const validTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+    "image/heif",
+  ];
   if (!validTypes.includes(file.type)) {
-    return "Tipo de archivo no válido. Use JPG, PNG o WEBP";
+    return "Tipo de archivo no válido. Use JPG, PNG, WEBP, HEIC o HEIF";
   }
 
   const maxSize = 5 * 1024 * 1024;

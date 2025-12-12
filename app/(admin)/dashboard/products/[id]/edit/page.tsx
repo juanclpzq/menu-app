@@ -21,6 +21,16 @@ async function getProduct(id: string) {
   return data;
 }
 
+async function getExistingCategories() {
+  const supabase = await createClient();
+  const { data } = await supabase.from("products").select("category");
+
+  if (!data) return [];
+
+  const categories = [...new Set(data.map((p) => p.category))];
+  return categories.sort();
+}
+
 export default async function EditProductPage({
   params,
 }: {
@@ -32,6 +42,8 @@ export default async function EditProductPage({
   if (!product) {
     notFound();
   }
+
+  const categories = await getExistingCategories();
 
   return (
     <>
@@ -87,7 +99,7 @@ export default async function EditProductPage({
         </p>
       </div>
 
-      <ProductForm product={product} />
+      <ProductForm product={product} existingCategories={categories} />
     </>
   );
 }

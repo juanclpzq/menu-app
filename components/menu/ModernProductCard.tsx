@@ -6,15 +6,22 @@ import { Product } from '@/types'
 
 interface ModernProductCardProps {
   product: Product
+  onFavoriteChange?: (isFavorite: boolean) => void
 }
 
-export function ModernProductCard({ product }: ModernProductCardProps) {
+export function ModernProductCard({ product, onFavoriteChange }: ModernProductCardProps) {
   const [isFavorite, setIsFavorite] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
   const [isAdded, setIsAdded] = useState(false)
 
   const handleAddClick = () => {
     setIsAdded(!isAdded)
+  }
+
+  const handleFavoriteClick = () => {
+    const newFavoriteState = !isFavorite
+    setIsFavorite(newFavoriteState)
+    onFavoriteChange?.(newFavoriteState)
   }
 
   return (
@@ -94,8 +101,8 @@ export function ModernProductCard({ product }: ModernProductCardProps) {
         }
 
         .modern-btn-favorite {
-          width: 36px;
-          height: 36px;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
           border: none;
           background: rgba(255, 255, 255, 0.95);
@@ -105,14 +112,26 @@ export function ModernProductCard({ product }: ModernProductCardProps) {
           justify-content: center;
           cursor: pointer;
           transition: all 200ms ease;
+          -webkit-tap-highlight-color: transparent;
         }
 
         .modern-btn-favorite:hover {
           transform: scale(1.1);
         }
 
+        .modern-btn-favorite:active {
+          transform: scale(0.95);
+        }
+
         .modern-btn-favorite.active {
           color: #C17853;
+        }
+
+        @media (max-width: 768px) {
+          .modern-btn-favorite {
+            width: 44px;
+            height: 44px;
+          }
         }
 
         .modern-category-pill {
@@ -200,7 +219,7 @@ export function ModernProductCard({ product }: ModernProductCardProps) {
         }
 
         .modern-btn-add {
-          padding: 12px 24px;
+          padding: 14px 28px;
           background: #8B7355;
           color: white;
           border: none;
@@ -211,6 +230,8 @@ export function ModernProductCard({ product }: ModernProductCardProps) {
           transition: all 300ms ease;
           white-space: nowrap;
           position: relative;
+          min-height: 44px;
+          -webkit-tap-highlight-color: transparent;
         }
 
         .modern-btn-add:hover:not(.added) {
@@ -220,7 +241,7 @@ export function ModernProductCard({ product }: ModernProductCardProps) {
         }
 
         .modern-btn-add:active:not(.added) {
-          transform: translateY(0);
+          transform: scale(0.98);
         }
 
         .modern-btn-add.added {
@@ -234,6 +255,10 @@ export function ModernProductCard({ product }: ModernProductCardProps) {
           box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
         }
 
+        .modern-btn-add.added:active {
+          transform: scale(0.98);
+        }
+
         @keyframes successPulse {
           0% {
             transform: scale(1);
@@ -243,6 +268,13 @@ export function ModernProductCard({ product }: ModernProductCardProps) {
           }
           100% {
             transform: scale(1);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .modern-btn-add {
+            padding: 12px 24px;
+            font-size: 15px;
           }
         }
       `}</style>
@@ -267,7 +299,7 @@ export function ModernProductCard({ product }: ModernProductCardProps) {
             )}
             <button
               className={`modern-btn-favorite ${isFavorite ? 'active' : ''}`}
-              onClick={() => setIsFavorite(!isFavorite)}
+              onClick={handleFavoriteClick}
             >
               <Heart size={18} fill={isFavorite ? 'currentColor' : 'none'} />
             </button>

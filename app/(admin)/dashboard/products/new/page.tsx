@@ -1,9 +1,21 @@
 // app/(admin)/dashboard/products/new/page.tsx
 import ProductForm from "@/components/dashboard/ProductForm";
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export default function NewProductPage() {
+async function getExistingCategories() {
+  const supabase = await createClient();
+  const { data } = await supabase.from("products").select("category");
+
+  if (!data) return [];
+
+  const categories = [...new Set(data.map((p) => p.category))];
+  return categories.sort();
+}
+
+export default async function NewProductPage() {
+  const categories = await getExistingCategories();
   return (
     <>
       <style>{`
@@ -58,7 +70,7 @@ export default function NewProductPage() {
         </p>
       </div>
 
-      <ProductForm />
+      <ProductForm existingCategories={categories} />
     </>
   );
 }

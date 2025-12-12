@@ -162,4 +162,5 @@ export default async function DashboardPage() {
   );
 }
 
-export const revalidate = 30;
+// Usar ISR con revalidación cada 60 segundos para el dashboard
+export const revalidate = 60;

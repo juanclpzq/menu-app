@@ -303,7 +303,7 @@ export function VintageProductCard({ product }: VintageProductCardProps) {
         }
 
         .vintage-btn {
-          padding: 12px 24px;
+          padding: 14px 28px;
           font-family: 'Special Elite', monospace;
           font-size: 12px;
           text-transform: uppercase;
@@ -313,6 +313,8 @@ export function VintageProductCard({ product }: VintageProductCardProps) {
           cursor: pointer;
           transition: all 200ms ease;
           color: #D84315;
+          min-height: 44px;
+          -webkit-tap-highlight-color: transparent;
         }
 
         .vintage-btn:hover {
@@ -320,6 +322,17 @@ export function VintageProductCard({ product }: VintageProductCardProps) {
           color: #F5F5DC;
           transform: translateY(-2px);
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .vintage-btn:active {
+          transform: scale(0.98);
+        }
+
+        @media (max-width: 768px) {
+          .vintage-btn {
+            padding: 12px 24px;
+            font-size: 13px;
+          }
         }
 
         .card-back-content {
